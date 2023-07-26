@@ -10,6 +10,8 @@ import { GlobalStyle } from "./GlobalStyles";
 import { ThemeProvider } from "styled-components";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
+import Login from "./Page/Auth/Login";
+import Register from "./Page/Auth/Register";
 
 function App() {
 
@@ -31,6 +33,8 @@ function App() {
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/product/:id" element={<SingleProduct/>}/>
           <Route path="/cart" element={<Cart/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
           <Route path="*" element={<Error/>}/>
         </Routes>
         <Footer/>

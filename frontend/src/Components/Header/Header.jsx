@@ -55,7 +55,7 @@ const Header = () => {
             <PopoverContent textAlign={'center'} w="200px">
               <PopoverArrow/>
               <PopoverCloseButton/>
-              <NavLink to="/signin"><PopoverHeader>Sign In</PopoverHeader></NavLink>
+              <NavLink to="/login"><PopoverHeader>Sign In</PopoverHeader></NavLink>
               <PopoverBody>
                 Hi 
               </PopoverBody>
