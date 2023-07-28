@@ -1,8 +1,9 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { MdArrowForwardIos } from 'react-icons/md';
+import { MdArrowForwardIos, MdStar } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom'
+import Slider from "react-slick";
 
 const SingleProduct = () => {
   const {id} = useParams();
@@ -28,11 +29,22 @@ const SingleProduct = () => {
     setCart((prev) => [...prev, item] )
   }
 
-  console.log(cart)
-
   if(!product) {
     return <p>Loading....</p>
   }
+
+  const fullStars = Math.floor(product.rating);
+  const partialStar = product.rating - fullStars;
+
+
+  const settings = {
+    className: "left",
+    centerMode: true,
+    infinite: true,
+    centerPadding: "60px",
+    slidesToShow: 4,
+    speed: 500,
+  };
 
   return (
     <Box w="90%" m="auto">
@@ -55,21 +67,41 @@ const SingleProduct = () => {
               <Box w="100%">
                   <Image src={product.images[0]} m="auto"/>
               </Box>
-              <Flex my="10" gap={5}>
+              <Slider {...settings}>
                 {
                   product && product.images && product.images.map((image) => (
-                    <Image src={image} key={image} h="100px" />
+                    <Box>
+                      <Image src={image} key={image} h="100px" />
+                    </Box>
                   ))
                 }
+
+              </Slider>
+              <Flex my="10" gap={5}>
               </Flex>
             </Box>
             <Flex w="60%" flexDir={'column'} gap={2}>
               <Box>
                 <Heading>{product.title}</Heading>
               </Box>
-              <Box>
+              <Flex gap={5}>
+                <Flex fontSize={'2xl'}>
+                  {
+                    [...Array(fullStars)].map((_, index) => (
+                      <MdStar key={index} color="gold"/>
+                    ))
+                  }
+
+                  {
+                    partialStar > 0 && (
+                      <MdStar color="gold"
+                      style={{ clipPath: `inset(0 ${100 - partialStar * 100}% 0 0)` }}
+                      />
+                    )
+                  }
+                </Flex>
                 ({product.rating})
-              </Box>
+              </Flex>
               <Box>
                 <Heading fontSize={'2xl'}>₹{product.price}</Heading>
               </Box>
@@ -99,18 +131,3 @@ export default SingleProduct
 
 
 
-// {
-//   "id": 3,
-//   "title": "Samsung Universe 9",
-//   "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
-//   "price": 1249,
-//   "discountPercentage": 15.46,
-//   "rating": 4.09,
-//   "stock": 36,
-//   "brand": "Samsung",
-//   "category": "smartphones",
-//   "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
-//   "images": [
-//       "https://i.dummyjson.com/data/products/3/1.jpg"
-//   ]
-// }

@@ -14,11 +14,10 @@ const Products = () => {
     })
   }
 
-
   useEffect(() => {
     fetchProducts();
   }, [])
-
+  
   return (
     <Box w="90%" m="auto">
       <Box>
