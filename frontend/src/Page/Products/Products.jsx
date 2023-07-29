@@ -8,9 +8,9 @@ const Products = () => {
   const [products, setProducts] = useState();
 
   const fetchProducts = () => {
-    axios.get("https://dummyjson.com/products")
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/products`)
     .then((res) => {
-      setProducts(res.data.products)
+      setProducts(res.data)
     })
   }
 
@@ -49,7 +49,7 @@ const Products = () => {
               <SimpleGrid columns={3} gap={10} m="50px 0">
                   {
                     products && products.map((product, index) => (
-                      <Link to={`/product/${product.id}`} key={product.id}>
+                      <Link to={`/product/${product._id}`} key={product._id}>
                         <Box  boxShadow={'md'} p={5} borderRadius={'20px'} h="360px">
                           <Image src={product.images[0]} h="250px" w="full"/>
                           <Box m="20px 0">

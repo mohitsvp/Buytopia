@@ -16,8 +16,9 @@ const SingleProduct = () => {
   }, [])
 
   const fetchProducts = () => {
-    axios.get(`https://dummyjson.com/products/${id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/products/${id}`)
     .then((res) => {
+      console.log(res.data)
       setProduct(res.data)
     })
     .catch((err) => {
@@ -57,7 +58,7 @@ const SingleProduct = () => {
                   <Link to="/products">Products</Link>
               </BreadcrumbItem>
               <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="/">{product.category}</BreadcrumbLink>
+                  <BreadcrumbLink href="/">{product.category[0].name}</BreadcrumbLink>
               </BreadcrumbItem>
           </Breadcrumb>
         </Box>
@@ -69,9 +70,9 @@ const SingleProduct = () => {
               </Box>
               <Slider {...settings}>
                 {
-                  product && product.images && product.images.map((image) => (
-                    <Box>
-                      <Image src={image} key={image} h="100px" />
+                  product && product.images && product.images.map((image, index) => (
+                    <Box key={image}>
+                      <Image src={image}  h="100px" />
                     </Box>
                   ))
                 }
