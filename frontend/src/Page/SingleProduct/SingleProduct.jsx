@@ -2,15 +2,24 @@ import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Heading,
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { MdArrowForwardIos, MdStar } from 'react-icons/md';
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Slider from "react-slick";
+import { useAuth } from '../../Context/Auth/AuthContext';
+
 
 const SingleProduct = () => {
   const {id} = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(0);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState({});
+  const {token} = useAuth();
+  const navigate = useNavigate();
 
+  console.log(token)
+  
+  const config = {
+    headers : {Authorization: 'Bearer ' + token}
+  }
   useEffect(() => {
     fetchProducts()
   }, [])
@@ -18,7 +27,6 @@ const SingleProduct = () => {
   const fetchProducts = () => {
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/products/${id}`)
     .then((res) => {
-      console.log(res.data)
       setProduct(res.data)
     })
     .catch((err) => {
@@ -27,7 +35,19 @@ const SingleProduct = () => {
   }
 
   const addProduct = (item) => {
-    setCart((prev) => [...prev, item] )
+    if(token === null) {
+      navigate("/login")
+    } 
+    else{
+      setCart({
+        product : item._id,
+        quantity
+      })
+  
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/cart/add`, cart, config)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    } 
   }
 
   if(!product) {

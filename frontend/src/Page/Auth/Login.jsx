@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import {MdArrowForwardIos} from "react-icons/md"
 import authImage from "../../Assets/auth_image.jpg"
 import axios from "axios"
+import { useAuth } from '../../Context/Auth/AuthContext'
 
 const Login = () => {
     const toast = useToast()
@@ -12,6 +13,7 @@ const Login = () => {
         email : "",
         password : ""
     })
+    const {login} = useAuth();
 
     const handleChange = (event) => {
         const {name, value} = event.target
@@ -20,7 +22,7 @@ const Login = () => {
 
 
     const handleSubmit = () => {
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, {formData})
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, formData)
         .then((res) => {
             toast({
                 title : "Login success",
@@ -29,6 +31,7 @@ const Login = () => {
                 isClosable : true,
                 position : "top-right"
             })
+            login(res.data)
             navigate("/")
         })
         .catch((err) => {

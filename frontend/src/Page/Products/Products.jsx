@@ -32,7 +32,7 @@ const Products = () => {
         </Box>
         <Flex>
           <Box w="30%">
-
+              
           </Box>
           <Box w="70%">
               <Flex justifyContent={'space-between'}>

@@ -3,6 +3,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from "../../Assets/buytopia_logo.png"
 import {AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser} from "react-icons/ai"
+import { useAuth } from '../../Context/Auth/AuthContext'
 
 const links = [
   {
@@ -23,11 +24,8 @@ const links = [
 ]
 
 
-
-
-
-
 const Header = () => {
+  const {token, logout} = useAuth();
   return (
     <Flex justifyContent={'space-evenly'} alignItems={'center'} p="5" w="95%" m="auto" gap={10}>
       <Box  w="20%" ><NavLink to="/"><Image src={logo} margin={'auto'} w="70%"/></NavLink></Box>
@@ -55,10 +53,19 @@ const Header = () => {
             <PopoverContent textAlign={'center'} w="200px">
               <PopoverArrow/>
               <PopoverCloseButton/>
-              <NavLink to="/login"><PopoverHeader>Sign In</PopoverHeader></NavLink>
-              <PopoverBody>
-                Hi 
-              </PopoverBody>
+              <>
+              {
+                token !== null?
+                <PopoverHeader cursor={'pointer'} onClick={() => logout()}>Log Out</PopoverHeader>
+                :
+                <>
+                  <NavLink to="/login"><PopoverHeader>Sign In</PopoverHeader></NavLink>
+                  <PopoverBody>
+                    Hi 
+                  </PopoverBody>                
+                </>
+              }
+              </>
             </PopoverContent>
           </Popover>
       </Flex>
