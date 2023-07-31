@@ -39,12 +39,12 @@ const SingleProduct = () => {
       navigate("/login")
     } 
     else{
-      setCart({
+      const updatedCart = {
         product : item._id,
         quantity
-      })
+      }
   
-      axios.post(`${process.env.REACT_APP_BACKEND_URL}/cart/add`, cart, config)
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/cart/add`, updatedCart, config)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     } 

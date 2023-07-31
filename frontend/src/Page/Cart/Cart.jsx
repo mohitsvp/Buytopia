@@ -1,4 +1,4 @@
-import { Box, Flex, Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/Auth/AuthContext';
@@ -6,6 +6,7 @@ import { useAuth } from '../../Context/Auth/AuthContext';
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const {token} = useAuth();
+  const [total, setTotal] = useState(0);
 
   const fetchCart = () => {
     const config = {
@@ -21,8 +22,6 @@ const Cart = () => {
       })
     }
   }
-
-  console.log(cart);
 
   useEffect(() => {
     fetchCart();
@@ -42,12 +41,25 @@ const Cart = () => {
                 </Tr>
               </Thead>
               <Tbody>
-
+                  {
+                    cart && cart.map((item) => (
+                      <Tr key={item._id}>
+                        <Td><Image src={item.product.thumbnail} h="100px" w="150px"/></Td>
+                        <Td>{item.quantity}</Td>
+                        <Td>₹{item.product.price}</Td>
+                      </Tr>
+                    ))
+                  }
               </Tbody>
             </Table>
           </TableContainer>
         </Box>
-        <Box></Box>
+        <Box w="25%" p={5}>
+          <Flex justifyContent={'space-between'}>
+            <Box><Text as="b">Subtotal</Text></Box>
+            <Box><Text>₹{total}</Text></Box>
+          </Flex>
+        </Box>
       </Flex>
     </Box>
   )

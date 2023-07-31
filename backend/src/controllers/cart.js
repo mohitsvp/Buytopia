@@ -1,29 +1,27 @@
 const Cart = require("../models/cart.model");
 
 const addToCart = async (req, res) => {
-    const {productId, quantity}  = req.body;
+    const {product, quantity}  = req.body;
     const userId = req.user.id;
 
     try {
-        let cart = await Cart.findOne({user : userId});
+        let cart = await Cart.findOne({userId : userId});
 
         if (!cart) {
             cart = new Cart({ user : userId, products : []})
         }
 
-        const existingProduct = cart.products.find((item) => item.product.toString() === productId);
+        const existingProduct = cart.products.find((item) => item.product.toString() === product);
 
         if (existingProduct) {
             existingProduct.quantity += quantity;
         }
         else {
-            cart.products.push({product : productId, quantity : quantity})
+            cart.products.push({product : product, quantity : quantity})
             cart.userId = userId
         }
 
         await cart.save();
-
-        console.log(cart);
 
         return res.send("Item added to cart");
     } catch (error) {
@@ -34,9 +32,8 @@ const addToCart = async (req, res) => {
 const getCart = async (req, res) => {
     const userId = req.user.id;
     try {
-        const cart = await Cart.findOne({userId}).populate('products.product');
-        console.log(cart)
-        return res.send(cart);
+        const cart = await Cart.find({userId}).populate('products.product');
+        return res.send(cart[0].products);
     } catch (error) {
         return res.status(500).send(error.message);
     }
