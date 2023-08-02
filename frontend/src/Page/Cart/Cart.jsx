@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, calc } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/Auth/AuthContext';
@@ -25,7 +25,21 @@ const Cart = () => {
 
   useEffect(() => {
     fetchCart();
-  }, [])
+  }, [token])
+
+
+  useEffect(() => {
+    let calculatedPrice = 0;
+
+    cart.forEach((item) => {
+      const subTotal = item.product.price * item.quantity;
+      const discount = (item.product.discountPercentage / 100)*subTotal;
+      calculatedPrice += subTotal - discount
+    })
+
+    setTotal(calculatedPrice)
+
+  }, [cart])
 
   return (
     <Box w="90%" m="auto">
@@ -54,11 +68,27 @@ const Cart = () => {
             </Table>
           </TableContainer>
         </Box>
-        <Box w="25%" p={5}>
-          <Flex justifyContent={'space-between'}>
-            <Box><Text as="b">Subtotal</Text></Box>
-            <Box><Text>₹{total}</Text></Box>
-          </Flex>
+        <Box w="20%" p={5} m="20px auto" boxShadow={'lg'} fontSize={'20px'}>
+          {
+            cart.map(item => (
+              <>
+                <Flex justifyContent={'space-between'} mb="10px">
+                  <Box><Text as="b" color="grey">Subtotal</Text></Box>
+                  <Box><Text as="b">₹{item.product.price * item.quantity}</Text></Box>
+                </Flex>
+                <Flex justifyContent={'space-between'} mb="10px">
+                    <Box><Text as="b" color="grey">Discount</Text></Box>
+                    <Box><Text>₹{((item.product.price * item.product.discountPercentage)/100)*item.quantity}</Text></Box>
+                </Flex>
+                <hr/>
+                <Flex justifyContent={'space-between'} mt="20px" mb="10px">
+                  <Box><Text as="b" color="grey">Total</Text></Box>
+                  <Box><Text as="b">₹{total}</Text></Box>
+                </Flex>
+              </>
+            ))
+          }
+          <Box textAlign={'center'} mt="20px"><Button w="full" bg="black" color="white">CHECKOUT</Button></Box>
         </Box>
       </Flex>
     </Box>

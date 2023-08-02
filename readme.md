@@ -80,9 +80,3 @@ Timeline is one week
 8. User - Product Relationship (for tracking reviews and ratings):
     - One user can leave multiple reviews/ratings for different products (one-to-many relationship).
     - One product can have multiple reviews/ratings from different users (one-to-many relationship).
-
-
-
-- interview preparator
-- gpt integration : check
-- 5-6:30 project
