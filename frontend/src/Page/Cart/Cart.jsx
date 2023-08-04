@@ -2,6 +2,7 @@ import { Box, Button, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, T
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/Auth/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -41,6 +42,35 @@ const Cart = () => {
 
   }, [cart])
 
+
+  const handleProductQuantity = async (item, value) => {
+    const newQuantity = item.quantity + value;
+
+    if (newQuantity <= 0) {
+      // Remove the item from the cart
+      try {
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/cart/${item._id}`, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        fetchCart();
+      } catch (error) {
+        console.error('Error removing item from cart:', error);
+      }
+    } else {
+      // Update item quantity
+      try {
+        await axios.put(
+          `${process.env.REACT_APP_BACKEND_URL}/cart/${item._id}`,
+          { quantity: newQuantity },
+          { headers: { Authorization: 'Bearer ' + token } }
+        );
+        fetchCart();
+      } catch (error) {
+        console.error('Error updating item quantity:', error);
+      }
+    }
+  }
+
   return (
     <Box w="90%" m="auto">
       <Flex>
@@ -59,8 +89,16 @@ const Cart = () => {
                     cart && cart.map((item) => (
                       <Tr key={item._id}>
                         <Td><Image src={item.product.thumbnail} h="100px" w="150px"/></Td>
-                        <Td>{item.quantity}</Td>
-                        <Td>₹{item.product.price}</Td>
+                        <Td>
+                          <Flex alignItems={'center'} gap={2} border="1px solid #eee" w="30%" borderRadius={'lg'} fontSize={'lg'}>
+                            <Button  colorScheme="white" color="black"><Text fontSize={'2xl'} onClick={() => handleProductQuantity(item, -1)}>-</Text></Button>
+                            <Box as="b">
+                              {item.quantity}
+                            </Box>
+                            <Button colorScheme="white" color="black"><Text fontSize={'2xl'} onClick={() => handleProductQuantity(item, 1)}>+</Text></Button>
+                          </Flex>
+                          </Td>
+                        <Td><Text as="b" fontSize={'2xl'}>₹{item.product.price}</Text></Td>
                       </Tr>
                     ))
                   }
@@ -71,24 +109,24 @@ const Cart = () => {
         <Box w="20%" p={5} m="20px auto" boxShadow={'lg'} fontSize={'20px'}>
           {
             cart.map(item => (
-              <>
+              <React.Fragment key={item._id}>
                 <Flex justifyContent={'space-between'} mb="10px">
                   <Box><Text as="b" color="grey">Subtotal</Text></Box>
-                  <Box><Text as="b">₹{item.product.price * item.quantity}</Text></Box>
+                  <Box><Text as="b">₹{(item.product.price * item.quantity).toFixed(2)}</Text></Box>
                 </Flex>
                 <Flex justifyContent={'space-between'} mb="10px">
                     <Box><Text as="b" color="grey">Discount</Text></Box>
-                    <Box><Text>₹{((item.product.price * item.product.discountPercentage)/100)*item.quantity}</Text></Box>
+                    <Box><Text>₹{(((item.product.price * item.product.discountPercentage)/100)*item.quantity).toFixed(2)}</Text></Box>
                 </Flex>
                 <hr/>
                 <Flex justifyContent={'space-between'} mt="20px" mb="10px">
                   <Box><Text as="b" color="grey">Total</Text></Box>
-                  <Box><Text as="b">₹{total}</Text></Box>
+                  <Box><Text as="b">₹{total.toFixed(2)}</Text></Box>
                 </Flex>
-              </>
+              </React.Fragment>
             ))
           }
-          <Box textAlign={'center'} mt="20px"><Button w="full" bg="black" color="white">CHECKOUT</Button></Box>
+          <Link to="/checkout"><Box textAlign={'center'} mt="20px"><Button w="full" bg="black" color="white">CHECKOUT</Button></Box></Link>
         </Box>
       </Flex>
     </Box>

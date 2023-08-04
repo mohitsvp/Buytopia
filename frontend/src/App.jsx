@@ -12,6 +12,8 @@ import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import Login from "./Page/Auth/Login";
 import Register from "./Page/Auth/Register";
+import Checkout from "./Page/Checkout/Checkout";
+import Payment from "./Page/Payment/Payment";
 
 function App() {
 
@@ -35,6 +37,8 @@ function App() {
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/checkout" element={<Checkout/>}/>
+          <Route path="/payment" element={<Payment/>}/>
           <Route path="*" element={<Error/>}/>
         </Routes>
         <Footer/>

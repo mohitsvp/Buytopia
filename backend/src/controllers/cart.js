@@ -39,7 +39,25 @@ const getCart = async (req, res) => {
     }
 }
 
+const deleteItem = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const {id} = req.params
+        const cart = await Cart.findOneAndUpdate({userId}, {
+             $pull: { products: { _id: id } } , 
+        }, 
+        {new : true}).populate('products.product')
+
+        return res.status(204).send("Data updated successfully")
+        
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+
 module.exports = {
     addToCart,
-    getCart
+    getCart,
+    deleteItem
 }
