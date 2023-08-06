@@ -13,7 +13,29 @@ const addProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate([{path : 'category', select : 'name'}, {path : 'brand', select : 'name'}]);
+        let queryObject = {};
+
+        if(req.query.category !== '' && req.query.category !== undefined) {
+            queryObject["category"] = {$in : req.query.category};
+        }
+
+        if(req.query.brands !== '' && req.query.brands !== undefined) {
+            queryObject["brand"] = {$in : req.query.brands};
+        }
+
+        if(req.query.price !== '' && req.query.price !== undefined) {
+            queryObject["price"] = {$lte : req.query.price};
+        }
+
+        if(req.query.rating !== '' && req.query.rating !== undefined) {
+            queryObject["rating"] = {$lte : req.query.rating};
+        }
+
+        if(req.query.discount !== '' && req.query.discount !== undefined){
+            queryObject["discountPercentage"] = {$gte : req.query.discount};
+        }
+
+        const products = await Product.find(queryObject).populate([{path : 'category', select : 'name'}, {path : 'brand', select : 'name'}]);
         return res.send(products);
     } catch (error) {
         return res.status(500).send(error.message)

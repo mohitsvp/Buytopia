@@ -119,13 +119,13 @@ const Cart = () => {
                     <Box><Text>₹{(((item.product.price * item.product.discountPercentage)/100)*item.quantity).toFixed(2)}</Text></Box>
                 </Flex>
                 <hr/>
-                <Flex justifyContent={'space-between'} mt="20px" mb="10px">
-                  <Box><Text as="b" color="grey">Total</Text></Box>
-                  <Box><Text as="b">₹{total.toFixed(2)}</Text></Box>
-                </Flex>
               </React.Fragment>
             ))
           }
+            <Flex justifyContent={'space-between'} mt="20px" mb="10px">
+              <Box><Text as="b" color="grey">Total</Text></Box>
+              <Box><Text as="b">₹{total.toFixed(2)}</Text></Box>
+            </Flex>
           <Link to="/checkout"><Box textAlign={'center'} mt="20px"><Button w="full" bg="black" color="white">CHECKOUT</Button></Box></Link>
         </Box>
       </Flex>
