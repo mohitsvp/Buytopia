@@ -110,6 +110,7 @@ const Cart = () => {
           {
             cart.map(item => (
               <React.Fragment key={item._id}>
+                <Box m={2}><Text as="b">{item.product.title}</Text></Box>
                 <Flex justifyContent={'space-between'} mb="10px">
                   <Box><Text as="b" color="grey">Subtotal</Text></Box>
                   <Box><Text as="b">₹{(item.product.price * item.quantity).toFixed(2)}</Text></Box>

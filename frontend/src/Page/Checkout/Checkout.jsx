@@ -114,7 +114,7 @@ const Checkout = () => {
                 <Box my={5}>
                     {
                         cart.map((item) => (
-                            <Flex key={item._id} justifyContent={'space-between'}>
+                            <Flex key={item._id} justifyContent={'space-between'} my={5}>
                                 <Flex gap={5}>
                                     <Box>
                                         <Image src={item.product.thumbnail} w="100px" h="100px"/>
