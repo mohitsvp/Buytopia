@@ -220,6 +220,11 @@ const Products = () => {
                     </SliderTrack>
                     <SliderThumb />
                   </Slider>
+                  <Box>
+                    <Text>
+                      From ₹ 0 to ₹ {filters.price}
+                    </Text>
+                  </Box>
                 </AccordionPanel>
               </AccordionItem>
               <AccordionItem>
@@ -246,6 +251,11 @@ const Products = () => {
                     </SliderTrack>
                     <SliderThumb />
                   </Slider>
+                  <Box>
+                    <Text>
+                      From 0 ⭐ to {filters.rating} ⭐
+                    </Text>
+                  </Box>
                 </AccordionPanel>
               </AccordionItem>
               <AccordionItem>

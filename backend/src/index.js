@@ -13,6 +13,7 @@ const productRoutes = require("./routes/product.js");
 const categoryRoutes = require("./routes/categories.js");
 const brandRoutes = require("./routes/brand.js");
 const cartRoutes = require("./routes/cart.js");
+const orderRoutes = require("./routes/order.js");
 
 // Middlewares
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/api/auth", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRoutes);
 
 // Start the server
 app.listen(PORT, () => {

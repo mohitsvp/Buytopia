@@ -1,15 +1,26 @@
 const mongoose = require('mongoose');
 
+
+const addressSchema = new mongoose.Schema(
+    {
+        name : {type : 'string'},
+        number : {type : 'string'},
+        street : {type : 'string'},
+        city : {type : 'string'},
+        state : {type : 'string'},
+        pinCode : {type : 'string'}
+    }
+)
 const orderSchema = new mongoose.Schema(
     {
-        product : {types : mongoose.Schema.Types.ObjectId, ref : 'Product'},
-        paymentStatus : {types : String, enum : ['Pending', 'Done', 'Failed']},
-        orderStatus : {types : String, enum : ['Pending', 'Shipped', 'Delivered'] },
-        trackingId : {types : mongoose.Schema.Types.ObjectId, ref : 'OrderTracking'},
-        comments : {types : String},
-        userId : {types : mongoose.Schema.Types.ObjectId, ref : 'User'},
-        Address : {types : String},
-        total : {types : Number}
+        product : [{type : mongoose.Schema.Types.ObjectId, ref : 'Product'}],
+        paymentStatus : {type : String, enum : ['Pending', 'Done', 'Failed'], default : 'Done'},
+        orderStatus : {type : String, enum : ['Pending', 'Shipped', 'Delivered'], default : 'Pending'},
+        trackingId : {type : mongoose.Schema.Types.ObjectId, ref : 'OrderTracking'},
+        comments : {type : String},
+        userId : {type : mongoose.Schema.Types.ObjectId, ref : 'User'},
+        Address : addressSchema,
+        total : {type : Number}
     },
     {
         versionKey : false,

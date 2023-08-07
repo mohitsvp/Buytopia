@@ -11,6 +11,14 @@ const Checkout = () => {
     const [subTotal, setSubTotal] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [shipmentCost, setShipmentCost] = useState(0);
+    const [address, setAddress] = useState({
+        name : "",
+        number : "",
+        street : "",
+        state : "",
+        city : "",
+        pinCode : ""
+    });
 
     useEffect(() => {
         fetchCart();
@@ -57,6 +65,15 @@ const Checkout = () => {
         }
       }
 
+      const handleAddressChange = (event) => {
+        const {name, value} = event.target;
+        setAddress((prevValue) => ({...prevValue, [name] : value}));
+      }
+
+      const handleAddressSubmit = () => {
+        localStorage.setItem("Address", JSON.stringify(address))
+      }
+
 
   return (
     <Box  w="90%" m="auto" >
@@ -64,47 +81,43 @@ const Checkout = () => {
             <Box w="70%" p={5} borderRadius={'md'} border="1px solid #eee">
                 <Flex flexDirection={'column'} gap={5}>
                     <Box><Heading>Basic details</Heading></Box>
-                    <FormControl>
-                        <FormLabel>Full Name *</FormLabel>
-                        <Input placeholder='Enter your full name'/>
-                    </FormControl>
                     <Flex gap={5}>
-                        <Box w="50%">
+                        <Box w="70%">
                             <FormControl>
-                                <FormLabel>Email *</FormLabel>
-                                <Input type="email" placeholder='Enter your email'/>
+                                <FormLabel>Full Name *</FormLabel>
+                                <Input type="text" placeholder='Enter your Full Name' name="name" value={address.name} onChange={handleAddressChange}/>
                             </FormControl>
                         </Box>
-                        <Box w="50%">
+                        <Box w="30%">
                             <FormControl>
                                 <FormLabel>Phone Number *</FormLabel>
-                                <Input type="number" placeholder='Enter your Number'/>
+                                <Input type="number" placeholder='Enter your Number' name="number" value={address.number} onChange={handleAddressChange}/>
                             </FormControl>
                         </Box>
                     </Flex>
                     <Box><Heading>Address</Heading></Box>
                     <FormControl>
                         <FormLabel>Street Name / Locality *</FormLabel>
-                        <Input placeholder='Enter your Street Name / Locality'/>
+                        <Input placeholder='Enter your Street Name / Locality' name="street" value={address.street} onChange={handleAddressChange}/>
                     </FormControl>
                     <Flex gap={5}>
                         <Box w="50%">
                             <FormControl>
                                 <FormLabel>State *</FormLabel>
-                                <Input placeholder='State'/>
+                                <Input placeholder='State' name="state" value={address.state} onChange={handleAddressChange}/>
                             </FormControl>        
                         </Box>
                         <Box w="50%">
                             <FormControl>
                                 <FormLabel>City *</FormLabel>
-                                <Input placeholder='City'/>
+                                <Input placeholder='City' name="city" value={address.city} onChange={handleAddressChange}/>
                             </FormControl>
                         </Box>
                     </Flex>
                     <Box>
                         <FormControl>
                             <FormLabel>Pin Code</FormLabel>
-                            <Input type="number" placeholder='Pin Code'/>
+                            <Input type="number" placeholder='Pin Code' name="pinCode" value={address.pinCode} onChange={handleAddressChange}/>
                         </FormControl>
                     </Box>
                 </Flex>
@@ -187,7 +200,7 @@ const Checkout = () => {
                 </Box>
                 <Link to="/payment">
                     <Box>
-                        <Button w="full" color="white" bg="black">Continue to Payment</Button>
+                        <Button w="full" color="white" bg="black" onClick={handleAddressSubmit}>Continue to Payment</Button>
                     </Box>
                 </Link>
             </Box>

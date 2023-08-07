@@ -2,8 +2,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/Auth/AuthContext';
-import { Link } from 'react-router-dom';
-import {IoIosArrowDown} from "react-icons/io"
+
 
 const Checkout = () => {
     const [cart, setCart] = useState([]);
@@ -12,7 +11,12 @@ const Checkout = () => {
     const [subTotal, setSubTotal] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [shipmentCost, setShipmentCost] = useState(0);
-    const [upivalue, setUPIValue] = React.useState('googlePay')
+    const [upivalue, setUPIValue] = React.useState('')
+    const [orderDetails, setOrderDetails] = useState({
+        product : [],
+        Address : JSON.parse(localStorage.getItem('Address')),
+        total : 0
+    });
 
     useEffect(() => {
         fetchCart();
@@ -59,6 +63,21 @@ const Checkout = () => {
         }
       }
 
+    const handleOrder = () => {
+        let products = cart.map((item) => item.product._id)
+        orderDetails.product = products
+        orderDetails.total = Math.ceil(total)
+        
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/order/add`, orderDetails,  {
+            headers : {
+                Authorization : `Bearer ${token}`
+            }
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err) => console.error(err));
+    }
 
   return (
     <Box  w="90%" m="auto" >
@@ -192,7 +211,7 @@ const Checkout = () => {
                 <Box>
                 </Box>
                     <Box>
-                        <Button w="full" color="white" bg="black">Pay</Button>
+                        <Button w="full" color="white" bg="black" onClick={handleOrder}>Pay</Button>
                     </Box>
                 </Box>
         </Flex>
